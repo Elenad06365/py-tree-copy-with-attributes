@@ -22,3 +22,10 @@ If the destination directory already exists and is **not empty**, `copy_tree` ra
 Dangling symlinks are copied verbatim — only the link target string is read, never the target itself, so a link whose target does not exist is handled identically to one whose target does.
 
 FIFOs, sockets, and device files are out of scope and will raise `OSError(ENOTSUP)` if encountered, rather than being silently dropped.
+
+## Performance
+
+The window keeps a bounded buffer, so `push` is constant time and memory does not
+grow with the length of the stream. `peak` and `trough` are linear in the window
+size, which is the trade that keeps `push` cheap.
+
